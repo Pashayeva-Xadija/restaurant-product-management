@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(user);
 
-        String token = jwtTokenProvider.generateToken(user.getEmail());
+        String token = jwtTokenProvider.generateToken(user);
         return new AuthResponseDto(token);
     }
 
@@ -49,8 +50,12 @@ public class AuthServiceImpl implements AuthService {
                 new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword())
         );
 
-        String token = jwtTokenProvider.generateToken(dto.getEmail());
+        User user = userRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("İstifadəçi tapılmadı"));
+
+        String token = jwtTokenProvider.generateToken(user);
         return new AuthResponseDto(token);
     }
+
 }
 

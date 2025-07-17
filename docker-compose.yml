@@ -23,8 +23,13 @@ services:
       POSTGRES_DB: restaurant_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
     networks:
       - restaurant-net
 
 networks:
   restaurant-net:
+
+volumes:
+  postgres-data:
