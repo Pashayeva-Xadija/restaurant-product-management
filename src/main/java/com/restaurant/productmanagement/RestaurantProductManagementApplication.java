@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "com.restaurant.productmanagement.repository")
-@EntityScan(basePackages = "com.restaurant.productmanagement.model") 
+@EntityScan(basePackages = "com.restaurant.productmanagement.model")
 public class RestaurantProductManagementApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RestaurantProductManagementApplication.class, args);
