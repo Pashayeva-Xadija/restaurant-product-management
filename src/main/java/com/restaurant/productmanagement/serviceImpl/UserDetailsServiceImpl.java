@@ -1,4 +1,4 @@
-package com.restaurant.productmanagement.serviceİmpl;
+package com.restaurant.productmanagement.serviceImpl;
 
 import com.restaurant.productmanagement.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

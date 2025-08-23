@@ -1,4 +1,4 @@
-package com.restaurant.productmanagement.serviceİmpl;
+package com.restaurant.productmanagement.serviceImpl;
 
 import com.restaurant.productmanagement.dto.ProductCategoryDto;
 import com.restaurant.productmanagement.mapper.ProductCategoryMapper;
