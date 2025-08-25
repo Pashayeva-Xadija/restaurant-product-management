@@ -2,7 +2,7 @@
 
 A backend REST API built with **Java 17** and **Spring Boot 3** to manage restaurant products and categories.  
 The system includes secure JWT-based authentication and role-based authorization for `USER` and `ADMIN` roles.  
-Admins can create and manage product data, while users can view resources in a read-only manner. Deployed using **Docker** and **Kubernetes (Minikube)** for full container support.
+Admins can create and manage product data, while users can view resources in a read-only manner. Deployed using Docker, Kubernetes (Minikube), and Render (CI/CD pipeline integration)
 
 ---
 
@@ -16,6 +16,8 @@ Admins can create and manage product data, while users can view resources in a r
 ✅ Centralized exception handling  
 ✅ Dockerized and Kubernetes-ready  
 ✅ API tested with Postman
+✅ Swagger API Documentation
+✅ CI/CD pipeline with Render
 
 ---
 
@@ -28,6 +30,8 @@ Admins can create and manage product data, while users can view resources in a r
 - Maven
 - Docker, Docker Compose
 - Kubernetes (Minikube)
+- Swagger (springdoc-openapi)
+- Render (CI/CD Deployment)
 - Postman
 - Git & GitHub
 
