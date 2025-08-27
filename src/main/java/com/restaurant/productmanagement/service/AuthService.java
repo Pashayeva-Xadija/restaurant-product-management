@@ -6,7 +6,7 @@ import com.restaurant.productmanagement.dto.LoginDto;
 import com.restaurant.productmanagement.dto.RegisterDto;
 
 public interface AuthService {
-    AuthResponseDto register(RegisterDto dto);
+    AuthResponseDto signup(RegisterDto dto);
 
     AuthResponseDto login(LoginDto dto);
 }
