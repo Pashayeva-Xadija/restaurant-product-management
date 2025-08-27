@@ -3,81 +3,141 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Restaurant – Şəkilli Sadə UI</title>
+    <title>Restaurant – Demo UI</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background: #f7f7fb; }
-        .navbar-brand { font-weight: 700; }
-        .card img { object-fit: cover; height: 160px; }
-        .placeholder { background: repeating-linear-gradient(45deg,#eee,#eee 10px,#f7f7f7 10px,#f7f7f7 20px); display:block;width:100%;height:160px; }
-        .admin-only { display: none; }
-        .price { font-weight: 700; }
-        .muted { color:#6c757d; }
+        :root{
+            
+            --hero-bg: url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1600&auto=format&fit=crop');
+            --brand: #ff6a3d;
+            --brand-dark: #e2552b;
+            --soft-bg: #f8f5f2;
+        }
+        body{background: var(--soft-bg);}
+        .navbar{
+            background: #ffffffcc; backdrop-filter: blur(6px);
+            border-bottom: 1px solid #eee;
+        }
+        .navbar-brand{
+            font-weight: 800; letter-spacing: .3px; color:#222;
+        }
+        .btn-brand{ background: var(--brand); color:#fff; border:none;}
+        .btn-brand:hover{ background: var(--brand-dark); color:#fff;}
+        /* HERO */
+        .hero{
+            position: relative; min-height: 46vh; display:flex; align-items:center; color:#fff;
+            background-image: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), var(--hero-bg);
+            background-size: cover; background-position: center;
+        }
+        .hero h1{ font-weight: 900; font-size: clamp(28px,5vw,48px); }
+        .hero p{ opacity:.95 }
+        .chip{ background:#ffffff22; border:1px solid #ffffff33; color:#fff; padding:6px 10px; border-radius:999px; font-size:12px; }
+        /* CARDS */
+        .menu-card{
+            border: 0; overflow: hidden; box-shadow: 0 10px 24px rgba(0,0,0,.06);
+            border-radius: 14px; background: #fff;
+            transition: transform .15s ease, box-shadow .15s ease;
+        }
+        .menu-card:hover{ transform: translateY(-2px); box-shadow:0 14px 28px rgba(0,0,0,.1); }
+        .menu-card img{ width: 100%; height: 180px; object-fit: cover; }
+        .price{ font-weight: 800; color: var(--brand); }
+        .badge-cat{ background:#f1efe9; color:#6c584c; }
+        /* ADMIN board */
+        .admin-panel .card{ border:0; box-shadow:0 10px 24px rgba(0,0,0,.06); border-radius:14px; }
+        /* FOOTER */
+        footer{ color:#8a8a8a; }
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-        <a class="navbar-brand" href="#">🍽️ Restaurant</a>
+        <a class="navbar-brand" href="javascript:void(0)">🍽️ A la Carte</a>
         <div class="ms-auto d-flex gap-2">
-            <button id="btnOpenLogin" class="btn btn-outline-primary btn-sm">Giriş</button>
+            <button id="btnOpenLogin" class="btn btn-outline-dark btn-sm">Giriş</button>
             <button id="btnLogout" class="btn btn-outline-secondary btn-sm" style="display:none;">Çıxış</button>
         </div>
     </div>
 </nav>
 
-<div class="container py-4">
-    <div id="globalAlert" class="alert alert-info py-2 small" role="alert" style="display:none;"></div>
+<!-- HERO -->
+<header class="hero">
+    <div class="container py-5">
+        <span class="chip">Spring Boot • PostgreSQL • JWT</span>
+        <h1 class="mt-3 mb-2">Restoran Menyusu – Canlı Demo</h1>
+        <p class="lead mb-0">Məhsulları kart şəklində görün, admin girişlə əlavə/silin.</p>
+        <div class="mt-3 d-flex gap-2">
+            <a href="/swagger-ui/" class="btn btn-light btn-sm">Swagger</a>
+            <button id="btnHeroLogin" class="btn btn-brand btn-sm">Admin Girişi</button>
+        </div>
+    </div>
+</header>
 
-    <div id="adminPanel" class="admin-only">
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <h5 class="card-title mb-3">Yeni məhsul əlavə et</h5>
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <label class="form-label">Ad</label>
-                        <input id="pName" class="form-control" placeholder="Məs: Latte">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Qiymət (AZN)</label>
-                        <input id="pPrice" type="number" step="0.01" class="form-control" placeholder="6.50">
-                    </div>
-                    <div class="col-md-5">
-                        <label class="form-label">Kateqoriya</label>
-                        <select id="pCategory" class="form-select">
-                            <option value="">— seçin —</option>
-                        </select>
-                    </div>
-                    <div class="col-md-8">
-                        <label class="form-label">Açıqlama (opsional)</label>
-                        <input id="pDesc" class="form-control" placeholder="Qısa təsvir">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Şəkil URL (opsional)</label>
-                        <input id="pImage" class="form-control" placeholder="https://...">
-                    </div>
+<!-- ALERT -->
+<div id="globalAlert" class="alert alert-info py-2 small text-center m-0" role="alert" style="display:none;"></div>
+
+<!-- ADMIN PANEL -->
+<section id="adminPanel" class="admin-panel container" style="display:none;">
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Yeni məhsul əlavə et</h5>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Ad</label>
+                    <input id="pName" class="form-control" placeholder="Məs: Latte">
                 </div>
-                <div class="mt-3">
-                    <button id="btnAdd" class="btn btn-primary">Əlavə et</button>
-                    <span id="addMsg" class="ms-3 small"></span>
+                <div class="col-md-3">
+                    <label class="form-label">Qiymət (AZN)</label>
+                    <input id="pPrice" type="number" step="0.01" class="form-control" placeholder="6.50">
                 </div>
+                <div class="col-md-5">
+                    <label class="form-label">Kateqoriya</label>
+                    <select id="pCategory" class="form-select">
+                        <option value="">— seçin —</option>
+                    </select>
+                </div>
+                <div class="col-md-8">
+                    <label class="form-label">Açıqlama (opsional)</label>
+                    <input id="pDesc" class="form-control" placeholder="Qısa təsvir">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Şəkil URL (opsional)</label>
+                    <input id="pImage" class="form-control" placeholder="https://...">
+                </div>
+            </div>
+            <div class="mt-3">
+                <button id="btnAdd" class="btn btn-brand">Əlavə et</button>
+                <span id="addMsg" class="ms-3 small"></span>
             </div>
         </div>
     </div>
+</section>
 
+<!-- MENU GRID -->
+<main class="container my-5">
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h4 class="m-0">Məhsullar</h4>
         <div><button id="btnRefresh" class="btn btn-outline-secondary btn-sm">Yenilə</button></div>
     </div>
 
-    <div id="productsRow" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
+    <div id="productsRow" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4"></div>
     <div id="emptyState" class="text-center text-muted my-5" style="display:none;">Hələ məhsul yoxdur.</div>
-</div>
+</main>
+
+<!-- FOOTER -->
+<footer class="container pb-5">
+    <hr>
+    <div class="d-flex justify-content-between small">
+        <span>© Demo Restaurant</span>
+        <span><a class="link-secondary" href="/swagger-ui/">Swagger</a></span>
+    </div>
+</footer>
+
 
 <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0">
         <div class="modal-header">
-            <h5 class="modal-title">Giriş (JWT)</h5>
+            <h5 class="modal-title">Admin girişi</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
@@ -89,120 +149,143 @@
                 <label class="form-label">Şifrə</label>
                 <input id="password" type="password" class="form-control" placeholder="••••••">
             </div>
-            <div id="loginMsg" class="small muted"></div>
+            <div id="loginMsg" class="small text-muted"></div>
         </div>
-        <div class="modal-footer"><button id="btnLogin" class="btn btn-primary">Daxil ol</button></div>
+        <div class="modal-footer">
+            <button id="btnLogin" class="btn btn-brand">Daxil ol</button>
+        </div>
     </div></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    const PLACEHOLDER_SVG = 'data:image/svg+xml;utf8,' + encodeURIComponent(
-        `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360">
-         <rect width="100%" height="100%" fill="#efefef"/>
-         <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#999" font-size="20" font-family="Arial">Şəkil yoxdur</text>
-       </svg>`
-    );
 
-    const $ = sel => document.querySelector(sel);
+    const $ = s => document.querySelector(s);
     function esc(s=''){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
-    function showAlert(msg,type='info'){const el=$('#globalAlert');el.className=`alert alert-${type} py-2 small`;el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',3000);}
     function token(){return localStorage.getItem('token')||'';}
     function setToken(t){t?localStorage.setItem('token',t):localStorage.removeItem('token');updateAuthUI();}
-    function authHeaders(){const h={'Content-Type':'application/json'};const t=token();if(t)h['Authorization']=`Bearer ${t}`;return h;}
-    function updateAuthUI(){const authed=!!token();$('#btnLogout').style.display=authed?'inline-block':'none';$('#btnOpenLogin').style.display=authed?'none':'inline-block';$('#adminPanel').style.display=authed?'block':'none';document.querySelectorAll('.admin-only').forEach(el=>el.style.display=authed?'block':'none');}
+    function authHeaders(){const h={'Content-Type':'application/json'}; const t=token(); if(t)h.Authorization=`Bearer ${t}`; return h;}
+    function showAlert(msg,type='info'){const el=$('#globalAlert');el.className=`alert alert-${type} py-2 small text-center m-0`;el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',2600);}
+
+
+    const loginModal = new bootstrap.Modal($('#loginModal'));
+    $('#btnOpenLogin').onclick = () => { $('#loginMsg').textContent=''; loginModal.show(); };
+    $('#btnHeroLogin').onclick = () => { $('#loginMsg').textContent=''; loginModal.show(); };
+    $('#btnLogout').onclick = () => { setToken(''); showAlert('Çıxış edildi','secondary'); loadProducts(); };
+    $('#btnLogin').onclick = async ()=> {
+        const email=$('#email').value.trim(), password=$('#password').value.trim();
+        const msg=$('#loginMsg'); if(!email||!password){ msg.textContent='Email/şifrə tələb olunur'; msg.className='small text-danger'; return; }
+        try{
+            const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+            if(!r.ok) throw new Error('Login uğursuz: '+r.status);
+            const data=await r.json(); setToken(data.token);
+            msg.textContent='Uğurlu giriş ✅'; msg.className='small text-success';
+            setTimeout(()=>loginModal.hide(), 500);
+            loadCategories(); loadProducts();
+        }catch(e){ msg.textContent=e.message; msg.className='small text-danger'; }
+    };
+
+    function updateAuthUI(){
+        const on = !!token();
+        $('#btnLogout').style.display = on ? 'inline-block' : 'none';
+        $('#btnOpenLogin').style.display = on ? 'none' : 'inline-block';
+        $('#adminPanel').style.display = on ? 'block' : 'none';
+        document.querySelectorAll('.admin-only').forEach(el=>el.style.display = on ? 'inline-block' : 'none');
+    }
+
 
     async function loadCategories(){
         try{
-            const r=await fetch('/api/categories');
+            const r = await fetch('/api/categories');
             if(!r.ok) throw new Error('Kateqoriyalar yüklənmədi: '+r.status);
-            const cats=await r.json();
-            const sel=$('#pCategory'); sel.innerHTML='<option value="">— seçin —</option>';
-            cats.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=`${c.id} — ${c.name}`;sel.appendChild(o);});
-        }catch(e){showAlert(e.message,'warning');}
+            const cats = await r.json();
+            const sel = $('#pCategory'); sel.innerHTML = '<option value="">— seçin —</option>';
+            cats.forEach(c=>{const o=document.createElement('option'); o.value=c.id; o.textContent=`${c.id} — ${c.name}`; sel.appendChild(o);});
+        }catch(e){ showAlert(e.message,'warning'); }
     }
 
+
     async function loadProducts(){
-        const row=$('#productsRow'), empty=$('#emptyState');
+        const row = $('#productsRow'), empty=$('#emptyState');
         row.innerHTML=''; empty.style.display='none';
-        for(let i=0;i<6;i++){const col=document.createElement('div');col.className='col';col.innerHTML=`<div class="card shadow-sm"><span class="placeholder"></span><div class="card-body"><div class="placeholder-glow"><span class="placeholder col-8"></span><span class="placeholder col-4"></span><span class="placeholder col-6"></span></div></div></div>`;row.appendChild(col);}
+
         try{
-            const r=await fetch('/api/products');
+            const r = await fetch('/api/products');
             if(!r.ok) throw new Error('Məhsullar yüklənmədi: '+r.status);
-            const items=await r.json();
-            row.innerHTML='';
+            const items = await r.json();
+
             if(!items.length){ empty.style.display='block'; return; }
+
             items.forEach(p=>{
-                const col=document.createElement('div'); col.className='col';
-                const imgSrc=p.imageUrl ? p.imageUrl : PLACEHOLDER_SVG;
-                col.innerHTML=`
-            <div class="card h-100 shadow-sm">
-              <img src="${esc(imgSrc)}" class="card-img-top" alt="${esc(p.name||'Məhsul')}">
+                const col = document.createElement('div'); col.className='col';
+                const img = p.imageUrl ? p.imageUrl : 'https://images.unsplash.com/photo-1604908176997-43192df2b5cb?q=80&w=1200&auto=format&fit=crop';
+                col.innerHTML = `
+            <div class="card menu-card h-100">
+              <img src="${esc(img)}" alt="${esc(p.name||'Məhsul')}">
               <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start mb-1">
+                <div class="d-flex justify-content-between align-items-start">
                   <h5 class="card-title m-0">${esc(p.name||'')}</h5>
                   <div class="price">${p.price!=null?esc(String(p.price)):''} <span class="text-muted">AZN</span></div>
                 </div>
-                ${p.description?`<p class="card-text small text-muted mb-2">${esc(p.description)}</p>`:''}
-                <span class="badge text-bg-secondary">${p.categoryName?esc(p.categoryName):(p.categoryId!=null?('#'+p.categoryId):'Kateqoriya')}</span>
+                ${p.description?`<p class="card-text small text-muted mt-2 mb-2">${esc(p.description)}</p>`:''}
+                <span class="badge badge-cat">${p.categoryName ? esc(p.categoryName) : (p.categoryId!=null?('#'+p.categoryId):'Kateqoriya')}</span>
               </div>
-              <div class="card-footer bg-white border-0 pt-0">
+              <div class="card-footer bg-white border-0 pt-0 d-flex justify-content-end gap-2">
                 <button class="btn btn-outline-danger btn-sm admin-only" data-del="${p.id}">Sil</button>
               </div>
             </div>`;
                 row.appendChild(col);
             });
+
             document.querySelectorAll('[data-del]').forEach(btn=>{
-                btn.addEventListener('click', async ()=>{
-                    const id=btn.getAttribute('data-del');
+                btn.onclick = async ()=>{
+                    const id = btn.getAttribute('data-del');
                     if(!confirm(`Silinsin? ID=${id}`)) return;
                     try{
-                        const r=await fetch(`/api/products/${id}`,{method:'DELETE',headers:authHeaders()});
+                        const r = await fetch(`/api/products/${id}`, { method:'DELETE', headers: authHeaders() });
                         if(!r.ok) throw new Error('Silinmədi: '+r.status);
-                        showAlert('Silindi ✅','success'); loadProducts();
-                    }catch(e){showAlert(e.message,'danger');}
-                });
+                        showAlert('Silindi ✅', 'success'); loadProducts();
+                    }catch(e){ showAlert(e.message,'danger'); }
+                }
             });
+
             updateAuthUI();
-        }catch(e){row.innerHTML=''; empty.style.display='block'; showAlert(e.message,'danger');}
+        }catch(e){
+            row.innerHTML=''; empty.style.display='block'; showAlert(e.message,'danger');
+        }
     }
+
 
     async function addProduct(){
-        const name=$('#pName').value.trim();
-        const price=$('#pPrice').value.trim();
-        const categoryId=$('#pCategory').value.trim();
-        const description=$('#pDesc').value.trim();
-        const imageUrl=$('#pImage').value.trim();
-        const addMsg=$('#addMsg');
+        const name = $('#pName').value.trim();
+        const price = $('#pPrice').value.trim();
+        const categoryId = $('#pCategory').value.trim();
+        const description = $('#pDesc').value.trim();
+        const imageUrl = $('#pImage').value.trim();
+        const addMsg = $('#addMsg');
 
-        if(!name||!price||!categoryId){addMsg.textContent='Ad, qiymət və kateqoriya tələb olunur';addMsg.className='text-danger small';return;}
-        const dto={ name, price:Number(price), categoryId:Number(categoryId), description:description||null, imageUrl:imageUrl||null };
+        if(!name || !price || !categoryId){
+            addMsg.textContent='Ad, qiymət və kateqoriya tələb olunur';
+            addMsg.className='small text-danger'; return;
+        }
+        const dto = { name, price:Number(price), categoryId:Number(categoryId), description: description || null, imageUrl: imageUrl || null };
 
         try{
-            const r=await fetch('/api/products',{method:'POST',headers:authHeaders(),body:JSON.stringify(dto)});
-            if(!r.ok){const t=await r.text();throw new Error(`Xəta ${r.status}: ${t}`);}
-            addMsg.textContent='Əlavə olundu ✅'; addMsg.className='text-success small';
+            const r = await fetch('/api/products', { method:'POST', headers: authHeaders(), body: JSON.stringify(dto) });
+            if(!r.ok){ const t=await r.text(); throw new Error(`Xəta ${r.status}: ${t}`); }
+            addMsg.textContent='Əlavə olundu ✅';
+            addMsg.className='small text-success';
             $('#pName').value=''; $('#pPrice').value=''; $('#pCategory').value=''; $('#pDesc').value=''; $('#pImage').value='';
             loadProducts();
-        }catch(e){addMsg.textContent=e.message; addMsg.className='text-danger small';}
+        }catch(e){
+            addMsg.textContent=e.message; addMsg.className='small text-danger';
+        }
     }
 
-    const loginModal=new bootstrap.Modal($('#loginModal'));
-    $('#btnOpenLogin').addEventListener('click',()=>{ $('#loginMsg').textContent=''; loginModal.show(); });
-    $('#btnLogin').addEventListener('click', async ()=>{
-        const email=$('#email').value.trim(); const password=$('#password').value.trim(); const msg=$('#loginMsg');
-        if(!email||!password){msg.textContent='Email/şifrə tələb olunur'; msg.className='small text-danger'; return;}
-        try{
-            const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
-            if(!r.ok) throw new Error('Login uğursuz: '+r.status);
-            const data=await r.json(); setToken(data.token);
-            msg.textContent='Uğurlu giriş ✅'; msg.className='small text-success'; setTimeout(()=>loginModal.hide(),400);
-            loadCategories(); loadProducts();
-        }catch(e){msg.textContent=e.message; msg.className='small text-danger';}
-    });
-    $('#btnLogout').addEventListener('click',()=>{ setToken(''); showAlert('Çıxış edildi','secondary'); loadProducts(); });
-    $('#btnAdd').addEventListener('click',addProduct);
-    $('#btnRefresh').addEventListener('click',()=>loadProducts());
+
+    $('#btnAdd').onclick = addProduct;
+    $('#btnRefresh').onclick = loadProducts;
+
 
     updateAuthUI(); loadCategories(); loadProducts();
 </script>
