@@ -9,47 +9,36 @@
         :root{
             
             --hero-bg: url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1600&auto=format&fit=crop');
-            --brand: #ff6a3d;
-            --brand-dark: #e2552b;
-            --soft-bg: #f8f5f2;
+            --brand:#ff6a3d; --brand-dark:#e2552b; --soft:#f8f5f2;
         }
-        body{background: var(--soft-bg);}
-        .navbar{
-            background: #ffffffcc; backdrop-filter: blur(6px);
-            border-bottom: 1px solid #eee;
-        }
-        .navbar-brand{
-            font-weight: 800; letter-spacing: .3px; color:#222;
-        }
-        .btn-brand{ background: var(--brand); color:#fff; border:none;}
-        .btn-brand:hover{ background: var(--brand-dark); color:#fff;}
-        /* HERO */
+        body{background:var(--soft);}
+        .navbar{background:#ffffffcc; backdrop-filter:blur(6px); border-bottom:1px solid #eee;}
+        .navbar-brand{font-weight:800; letter-spacing:.3px}
+        .btn-brand{background:var(--brand); color:#fff; border:none}
+        .btn-brand:hover{background:var(--brand-dark); color:#fff}
+
+
         .hero{
-            position: relative; min-height: 46vh; display:flex; align-items:center; color:#fff;
+            position:relative; min-height:44vh; display:flex; align-items:center; color:#fff;
             background-image: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), var(--hero-bg);
-            background-size: cover; background-position: center;
+            background-size:cover; background-position:center;
         }
-        .hero h1{ font-weight: 900; font-size: clamp(28px,5vw,48px); }
-        .hero p{ opacity:.95 }
-        .chip{ background:#ffffff22; border:1px solid #ffffff33; color:#fff; padding:6px 10px; border-radius:999px; font-size:12px; }
-        /* CARDS */
-        .menu-card{
-            border: 0; overflow: hidden; box-shadow: 0 10px 24px rgba(0,0,0,.06);
-            border-radius: 14px; background: #fff;
-            transition: transform .15s ease, box-shadow .15s ease;
-        }
-        .menu-card:hover{ transform: translateY(-2px); box-shadow:0 14px 28px rgba(0,0,0,.1); }
-        .menu-card img{ width: 100%; height: 180px; object-fit: cover; }
-        .price{ font-weight: 800; color: var(--brand); }
-        .badge-cat{ background:#f1efe9; color:#6c584c; }
-        /* ADMIN board */
-        .admin-panel .card{ border:0; box-shadow:0 10px 24px rgba(0,0,0,.06); border-radius:14px; }
-        /* FOOTER */
-        footer{ color:#8a8a8a; }
+        .hero h1{font-weight:900; font-size:clamp(28px,5vw,48px)}
+        .chip{background:#ffffff22; border:1px solid #ffffff33; color:#fff; padding:6px 10px; border-radius:999px; font-size:12px}
+
+
+        .menu-card{border:0; overflow:hidden; box-shadow:0 10px 24px rgba(0,0,0,.06); border-radius:14px; background:#fff; transition:transform .15s, box-shadow .15s}
+        .menu-card:hover{transform:translateY(-2px); box-shadow:0 14px 28px rgba(0,0,0,.1)}
+        .menu-card img{width:100%; height:180px; object-fit:cover}
+        .price{font-weight:800; color:var(--brand)}
+        .badge-cat{background:#f1efe9; color:#6c584c}
+
+        .admin-panel .card{border:0; box-shadow:0 10px 24px rgba(0,0,0,.06); border-radius:14px}
+        footer{color:#8a8a8a}
     </style>
 </head>
 <body>
-<!-- NAVBAR -->
+
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
         <a class="navbar-brand" href="javascript:void(0)">🍽️ A la Carte</a>
@@ -60,12 +49,12 @@
     </div>
 </nav>
 
-<!-- HERO -->
+
 <header class="hero">
     <div class="container py-5">
         <span class="chip">Spring Boot • PostgreSQL • JWT</span>
         <h1 class="mt-3 mb-2">Restoran Menyusu – Canlı Demo</h1>
-        <p class="lead mb-0">Məhsulları kart şəklində görün, admin girişlə əlavə/silin.</p>
+        <p class="lead mb-0">Məhsulları kart kimi görün, admin girişi ilə əlavə/silin.</p>
         <div class="mt-3 d-flex gap-2">
             <a href="/swagger-ui/" class="btn btn-light btn-sm">Swagger</a>
             <button id="btnHeroLogin" class="btn btn-brand btn-sm">Admin Girişi</button>
@@ -73,58 +62,90 @@
     </div>
 </header>
 
-<!-- ALERT -->
+
 <div id="globalAlert" class="alert alert-info py-2 small text-center m-0" role="alert" style="display:none;"></div>
 
 <!-- ADMIN PANEL -->
 <section id="adminPanel" class="admin-panel container" style="display:none;">
-    <div class="card mt-4">
-        <div class="card-body">
-            <h5 class="card-title mb-3">Yeni məhsul əlavə et</h5>
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <label class="form-label">Ad</label>
-                    <input id="pName" class="form-control" placeholder="Məs: Latte">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Qiymət (AZN)</label>
-                    <input id="pPrice" type="number" step="0.01" class="form-control" placeholder="6.50">
-                </div>
-                <div class="col-md-5">
-                    <label class="form-label">Kateqoriya</label>
-                    <select id="pCategory" class="form-select">
-                        <option value="">— seçin —</option>
-                    </select>
-                </div>
-                <div class="col-md-8">
-                    <label class="form-label">Açıqlama (opsional)</label>
-                    <input id="pDesc" class="form-control" placeholder="Qısa təsvir">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Şəkil URL (opsional)</label>
-                    <input id="pImage" class="form-control" placeholder="https://...">
+    <div class="row g-4 mt-4">
+
+        <div class="col-lg-5">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Yeni kateqoriya</h5>
+                    <div class="mb-2">
+                        <label class="form-label">Ad</label>
+                        <input id="cName" class="form-control" placeholder="Məs: İçkilər">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Açıqlama (opsional)</label>
+                        <input id="cDesc" class="form-control" placeholder="Qısa təsvir">
+                    </div>
+                    <button id="btnAddCat" class="btn btn-brand">Kateqoriya əlavə et</button>
+                    <span id="catMsg" class="ms-2 small"></span>
                 </div>
             </div>
-            <div class="mt-3">
-                <button id="btnAdd" class="btn btn-brand">Əlavə et</button>
-                <span id="addMsg" class="ms-3 small"></span>
+        </div>
+
+
+        <div class="col-lg-7">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Yeni məhsul</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Ad</label>
+                            <input id="pName" class="form-control" placeholder="Məs: Latte">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Qiymət (AZN)</label>
+                            <input id="pPrice" type="number" step="0.01" class="form-control" placeholder="6.50">
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label">Kateqoriya</label>
+                            <select id="pCategory" class="form-select">
+                                <option value="">— seçin —</option>
+                            </select>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label">Açıqlama (opsional)</label>
+                            <input id="pDesc" class="form-control" placeholder="Qısa təsvir">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Şəkil URL (opsional)</label>
+                            <input id="pImage" class="form-control" placeholder="https://...">
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <button id="btnAdd" class="btn btn-brand">Məhsul əlavə et</button>
+                        <span id="addMsg" class="ms-3 small"></span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- MENU GRID -->
+
 <main class="container my-5">
-    <div class="d-flex align-items-center justify-content-between mb-3">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
         <h4 class="m-0">Məhsullar</h4>
-        <div><button id="btnRefresh" class="btn btn-outline-secondary btn-sm">Yenilə</button></div>
+        <div class="d-flex gap-2">
+            <div class="input-group input-group-sm" style="width:auto; max-width:380px;">
+                <input id="search" class="form-control" placeholder="Axtarış...">
+                <select id="catFilter" class="form-select" style="max-width:210px;">
+                    <option value="">Bütün kateqoriyalar</option>
+                </select>
+            </div>
+            <button id="btnRefresh" class="btn btn-outline-secondary btn-sm">Yenilə</button>
+        </div>
     </div>
 
     <div id="productsRow" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4"></div>
     <div id="emptyState" class="text-center text-muted my-5" style="display:none;">Hələ məhsul yoxdur.</div>
 </main>
 
-<!-- FOOTER -->
+
 <footer class="container pb-5">
     <hr>
     <div class="d-flex justify-content-between small">
@@ -161,6 +182,7 @@
 <script>
 
     const $ = s => document.querySelector(s);
+    const fmtAZN = new Intl.NumberFormat('az-AZ',{style:'currency',currency:'AZN',maximumFractionDigits:2});
     function esc(s=''){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
     function token(){return localStorage.getItem('token')||'';}
     function setToken(t){t?localStorage.setItem('token',t):localStorage.removeItem('token');updateAuthUI();}
@@ -172,7 +194,8 @@
     $('#btnOpenLogin').onclick = () => { $('#loginMsg').textContent=''; loginModal.show(); };
     $('#btnHeroLogin').onclick = () => { $('#loginMsg').textContent=''; loginModal.show(); };
     $('#btnLogout').onclick = () => { setToken(''); showAlert('Çıxış edildi','secondary'); loadProducts(); };
-    $('#btnLogin').onclick = async ()=> {
+
+    $('#btnLogin').onclick = async ()=>{
         const email=$('#email').value.trim(), password=$('#password').value.trim();
         const msg=$('#loginMsg'); if(!email||!password){ msg.textContent='Email/şifrə tələb olunur'; msg.className='small text-danger'; return; }
         try{
@@ -194,97 +217,125 @@
     }
 
 
+    let allItems = [];
+
+    function renderItems(items){
+        const row = $('#productsRow'), empty=$('#emptyState');
+        row.innerHTML=''; if(!items.length){ empty.style.display='block'; return; } else empty.style.display='none';
+
+        items.forEach(p=>{
+            const col=document.createElement('div'); col.className='col';
+            const img=p.imageUrl ? p.imageUrl : 'https://source.unsplash.com/800x600/?food,plate';
+            col.innerHTML=`
+          <div class="card menu-card h-100">
+            <img src="${esc(img)}" alt="${esc(p.name||'Məhsul')}">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <h5 class="card-title m-0">${esc(p.name||'')}</h5>
+                <div class="price">${p.price!=null?fmtAZN.format(p.price):''}</div>
+              </div>
+              ${p.description?`<p class="card-text small text-muted mt-2 mb-2">${esc(p.description)}</p>`:''}
+              <span class="badge badge-cat">${p.categoryName ? esc(p.categoryName) : (p.categoryId!=null?('#'+p.categoryId):'Kateqoriya')}</span>
+            </div>
+            <div class="card-footer bg-white border-0 pt-0 d-flex justify-content-end">
+              <button class="btn btn-outline-danger btn-sm admin-only" data-del="${p.id}">Sil</button>
+            </div>
+          </div>`;
+            row.appendChild(col);
+        });
+
+
+        document.querySelectorAll('[data-del]').forEach(btn=>{
+            btn.onclick = async ()=>{
+                const id = btn.getAttribute('data-del');
+                if(!confirm(`Silinsin? ID=${id}`)) return;
+                try{
+                    const r = await fetch(`/api/products/${id}`, { method:'DELETE', headers: authHeaders() });
+                    if(!r.ok) throw new Error('Silinmədi: '+r.status);
+                    showAlert('Silindi ✅','success'); loadProducts();
+                }catch(e){ showAlert(e.message,'danger'); }
+            };
+        });
+    }
+
+    function filterAndRender(){
+        const q = $('#search')?.value?.toLowerCase()?.trim() || '';
+        const cf = $('#catFilter')?.value || '';
+        const filtered = allItems.filter(p =>
+            (!q || (p.name||'').toLowerCase().includes(q)) &&
+            (!cf || String(p.categoryId)===cf)
+        );
+        renderItems(filtered);
+    }
+
+
     async function loadCategories(){
         try{
-            const r = await fetch('/api/categories');
+            const r=await fetch('/api/categories');
             if(!r.ok) throw new Error('Kateqoriyalar yüklənmədi: '+r.status);
-            const cats = await r.json();
-            const sel = $('#pCategory'); sel.innerHTML = '<option value="">— seçin —</option>';
-            cats.forEach(c=>{const o=document.createElement('option'); o.value=c.id; o.textContent=`${c.id} — ${c.name}`; sel.appendChild(o);});
+            const cats=await r.json();
+
+
+            const sel=$('#pCategory'); sel.innerHTML='<option value="">— seçin —</option>';
+            cats.forEach(c=>{ const o=document.createElement('option'); o.value=c.id; o.textContent=`${c.id} — ${c.name}`; sel.appendChild(o); });
+
+
+            const catFilter = $('#catFilter'); if(catFilter){
+                catFilter.innerHTML = '<option value="">Bütün kateqoriyalar</option>';
+                cats.forEach(c=>{ const o=document.createElement('option'); o.value=c.id; o.textContent=c.name; catFilter.appendChild(o); });
+            }
         }catch(e){ showAlert(e.message,'warning'); }
     }
 
-
     async function loadProducts(){
-        const row = $('#productsRow'), empty=$('#emptyState');
-        row.innerHTML=''; empty.style.display='none';
-
         try{
             const r = await fetch('/api/products');
             if(!r.ok) throw new Error('Məhsullar yüklənmədi: '+r.status);
-            const items = await r.json();
-
-            if(!items.length){ empty.style.display='block'; return; }
-
-            items.forEach(p=>{
-                const col = document.createElement('div'); col.className='col';
-                const img = p.imageUrl ? p.imageUrl : 'https://images.unsplash.com/photo-1604908176997-43192df2b5cb?q=80&w=1200&auto=format&fit=crop';
-                col.innerHTML = `
-            <div class="card menu-card h-100">
-              <img src="${esc(img)}" alt="${esc(p.name||'Məhsul')}">
-              <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start">
-                  <h5 class="card-title m-0">${esc(p.name||'')}</h5>
-                  <div class="price">${p.price!=null?esc(String(p.price)):''} <span class="text-muted">AZN</span></div>
-                </div>
-                ${p.description?`<p class="card-text small text-muted mt-2 mb-2">${esc(p.description)}</p>`:''}
-                <span class="badge badge-cat">${p.categoryName ? esc(p.categoryName) : (p.categoryId!=null?('#'+p.categoryId):'Kateqoriya')}</span>
-              </div>
-              <div class="card-footer bg-white border-0 pt-0 d-flex justify-content-end gap-2">
-                <button class="btn btn-outline-danger btn-sm admin-only" data-del="${p.id}">Sil</button>
-              </div>
-            </div>`;
-                row.appendChild(col);
-            });
-
-            document.querySelectorAll('[data-del]').forEach(btn=>{
-                btn.onclick = async ()=>{
-                    const id = btn.getAttribute('data-del');
-                    if(!confirm(`Silinsin? ID=${id}`)) return;
-                    try{
-                        const r = await fetch(`/api/products/${id}`, { method:'DELETE', headers: authHeaders() });
-                        if(!r.ok) throw new Error('Silinmədi: '+r.status);
-                        showAlert('Silindi ✅', 'success'); loadProducts();
-                    }catch(e){ showAlert(e.message,'danger'); }
-                }
-            });
-
-            updateAuthUI();
-        }catch(e){
-            row.innerHTML=''; empty.style.display='block'; showAlert(e.message,'danger');
-        }
+            allItems = await r.json();
+            filterAndRender();
+        }catch(e){ showAlert(e.message,'danger'); }
     }
 
+    async function addCategory(){
+        const name = $('#cName').value.trim();
+        const description = $('#cDesc').value.trim();
+        const catMsg = $('#catMsg');
+        if(!name){ catMsg.textContent='Ad tələb olunur'; catMsg.className='small text-danger'; return; }
+        try{
+            const r = await fetch('/api/categories',{ method:'POST', headers: authHeaders(), body: JSON.stringify({ name, description: description||null }) });
+            if(!r.ok){ const t=await r.text(); throw new Error(`Xəta ${r.status}: ${t}`); }
+            catMsg.textContent='Kateqoriya əlavə olundu ✅'; catMsg.className='small text-success';
+            $('#cName').value=''; $('#cDesc').value='';
+            loadCategories();
+        }catch(e){ catMsg.textContent=e.message; catMsg.className='small text-danger'; }
+    }
 
     async function addProduct(){
-        const name = $('#pName').value.trim();
-        const price = $('#pPrice').value.trim();
-        const categoryId = $('#pCategory').value.trim();
-        const description = $('#pDesc').value.trim();
-        const imageUrl = $('#pImage').value.trim();
-        const addMsg = $('#addMsg');
+        const name=$('#pName').value.trim();
+        const price=$('#pPrice').value.trim();
+        const categoryId=$('#pCategory').value.trim();
+        const description=$('#pDesc').value.trim();
+        const imageUrl=$('#pImage').value.trim();
+        const addMsg=$('#addMsg');
 
-        if(!name || !price || !categoryId){
-            addMsg.textContent='Ad, qiymət və kateqoriya tələb olunur';
-            addMsg.className='small text-danger'; return;
-        }
-        const dto = { name, price:Number(price), categoryId:Number(categoryId), description: description || null, imageUrl: imageUrl || null };
+        if(!name || !price || !categoryId){ addMsg.textContent='Ad, qiymət və kateqoriya tələb olunur'; addMsg.className='small text-danger'; return; }
+        const dto={ name, price:Number(price), categoryId:Number(categoryId), description: description||null, imageUrl: imageUrl||null };
 
         try{
             const r = await fetch('/api/products', { method:'POST', headers: authHeaders(), body: JSON.stringify(dto) });
             if(!r.ok){ const t=await r.text(); throw new Error(`Xəta ${r.status}: ${t}`); }
-            addMsg.textContent='Əlavə olundu ✅';
-            addMsg.className='small text-success';
+            addMsg.textContent='Məhsul əlavə olundu ✅'; addMsg.className='small text-success';
             $('#pName').value=''; $('#pPrice').value=''; $('#pCategory').value=''; $('#pDesc').value=''; $('#pImage').value='';
             loadProducts();
-        }catch(e){
-            addMsg.textContent=e.message; addMsg.className='small text-danger';
-        }
+        }catch(e){ addMsg.textContent=e.message; addMsg.className='small text-danger'; }
     }
 
 
     $('#btnAdd').onclick = addProduct;
+    $('#btnAddCat').onclick = addCategory;
     $('#btnRefresh').onclick = loadProducts;
+    $('#search')?.addEventListener('input', filterAndRender);
+    $('#catFilter')?.addEventListener('change', filterAndRender);
 
 
     updateAuthUI(); loadCategories(); loadProducts();
