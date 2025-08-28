@@ -26,7 +26,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public AuthResponseDto signup(RegisterDto dto) {
+    public AuthResponseDto x1(RegisterDto dto) {
         if (userRepository.existsByEmail(dto.getEmail())) {
             throw new RuntimeException("Email artıq mövcuddur");
         }
