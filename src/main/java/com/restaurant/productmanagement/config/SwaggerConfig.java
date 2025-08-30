@@ -1,6 +1,9 @@
 package com.restaurant.productmanagement.config;
+
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,6 +16,16 @@ public class SwaggerConfig {
                 .info(new Info()
                         .title("Restaurant Product Management API")
                         .version("1.0")
-                        .description("Məhsul idarəetmə sistemi üçün REST API sənədləşməsi"));
+                        .description("Məhsul idarəetmə sistemi üçün REST API sənədləşməsi"))
+                .addSecurityItem(new SecurityRequirement().addList("BearerAuth"))
+                .components(new io.swagger.v3.oas.models.Components()
+                        .addSecuritySchemes("BearerAuth",
+                                new SecurityScheme()
+                                        .name("Authorization")
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")
+                        )
+                );
     }
 }
