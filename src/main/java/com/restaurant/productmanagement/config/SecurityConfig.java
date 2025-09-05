@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/open/**").permitAll()   // login/register üçün
+                        .requestMatchers("/api/open/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/", "/index.html", "/favicon.ico").permitAll()
                         .requestMatchers(HttpMethod.POST,   "/api/products/**", "/api/categories/**").hasAuthority("ROLE_ADMIN")
