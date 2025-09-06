@@ -43,4 +43,9 @@ public class CustomerOrder {
     private List<OrderItem> items = new ArrayList<>();
 
     private String paymentProviderRef;
+
+    private String deliveryAddress;
+    @Column(nullable = false)
+    private java.math.BigDecimal deliveryFee;
+
 }

@@ -16,4 +16,6 @@ public class OrderDto {
     private BigDecimal totalAmount;
     private List<CartItemDto> items;
     private String paymentProviderRef;
+    private String deliveryAddress;
+    private java.math.BigDecimal deliveryFee;
 }
