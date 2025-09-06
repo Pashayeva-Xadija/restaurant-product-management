@@ -3,37 +3,32 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Restaurant – Demo UI</title>
+    <title>Restoran Menyusu – Demo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root{
-
-            --hero-bg: url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1600&auto=format&fit=crop');
+            --hero-bg:url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1600&auto=format&fit=crop');
             --brand:#ff6a3d; --brand-dark:#e2552b; --soft:#f8f5f2;
         }
         body{background:var(--soft);}
-        .navbar{background:#ffffffcc; backdrop-filter:blur(6px); border-bottom:1px solid #eee;}
-        .navbar-brand{font-weight:800; letter-spacing:.3px}
-        .btn-brand{background:var(--brand); color:#fff; border:none}
-        .btn-brand:hover{background:var(--brand-dark); color:#fff}
-
-
-        .hero{
-            position:relative; min-height:44vh; display:flex; align-items:center; color:#fff;
-            background-image: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), var(--hero-bg);
-            background-size:cover; background-position:center;
-        }
-        .hero h1{font-weight:900; font-size:clamp(28px,5vw,48px)}
-        .chip{background:#ffffff22; border:1px solid #ffffff33; color:#fff; padding:6px 10px; border-radius:999px; font-size:12px}
-
-        .menu-card{border:0; overflow:hidden; box-shadow:0 10px 24px rgba(0,0,0,.06); border-radius:14px; background:#fff; transition:transform .15s, box-shadow .15s}
-        .menu-card:hover{transform:translateY(-2px); box-shadow:0 14px 28px rgba(0,0,0,.1)}
-        .menu-card img{width:100%; height:180px; object-fit:cover}
-        .price{font-weight:800; color:var(--brand)}
-        .badge-cat{background:#f1efe9; color:#6c584c}
-
-        .admin-panel .card{border:0; box-shadow:0 10px 24px rgba(0,0,0,.06); border-radius:14px}
+        .navbar{background:#ffffffcc;backdrop-filter:blur(6px);border-bottom:1px solid #eee;}
+        .navbar-brand{font-weight:800;letter-spacing:.3px}
+        .btn-brand{background:var(--brand);color:#fff;border:none}
+        .btn-brand:hover{background:var(--brand-dark);color:#fff}
+        .hero{position:relative;min-height:44vh;display:flex;align-items:center;color:#fff;
+            background-image:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),var(--hero-bg);
+            background-size:cover;background-position:center;}
+        .hero h1{font-weight:900;font-size:clamp(28px,5vw,48px)}
+        .chip{background:#ffffff22;border:1px solid #ffffff33;color:#fff;padding:6px 10px;border-radius:999px;font-size:12px}
+        .menu-card{border:0;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.06);border-radius:14px;background:#fff;transition:.15s}
+        .menu-card:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(0,0,0,.1)}
+        .menu-card img{width:100%;height:180px;object-fit:cover}
+        .price{font-weight:800;color:var(--brand)}
+        .badge-cat{background:#f1efe9;color:#6c584c}
+        .admin-panel .card{border:0;box-shadow:0 10px 24px rgba(0,0,0,.06);border-radius:14px}
         footer{color:#8a8a8a}
+
+        .admin-only{display:none;}
     </style>
 </head>
 <body>
@@ -42,6 +37,10 @@
     <div class="container">
         <a class="navbar-brand" href="javascript:void(0)">🍽️ Restoran Menyu</a>
         <div class="ms-auto d-flex gap-2">
+            <button id="btnOpenCart" class="btn btn-outline-dark btn-sm position-relative" style="display:none;">
+                Səbət
+                <span id="cartCount" class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill">0</span>
+            </button>
             <button id="btnOpenLogin" class="btn btn-outline-dark btn-sm">Giriş</button>
             <button id="btnLogout" class="btn btn-outline-secondary btn-sm" style="display:none;">Çıxış</button>
         </div>
@@ -54,9 +53,7 @@
         <h1 class="mt-3 mb-2">Restoran Menyusu – Canlı Demo</h1>
         <p class="lead mb-0">Məhsulları kart kimi görün, admin girişi ilə əlavə/silin.</p>
         <div class="mt-3 d-flex gap-2">
-
-            <a href="https://restaurant-product-management-production.up.railway.app/swagger-ui/index.html"
-               class="btn btn-light btn-sm" target="_blank" rel="noopener">Swagger</a>
+            <a href="/swagger-ui/index.html" class="btn btn-light btn-sm" target="_blank" rel="noopener">Swagger</a>
             <button id="btnHeroLogin" class="btn btn-brand btn-sm">Admin Girişi</button>
         </div>
     </div>
@@ -65,9 +62,8 @@
 <div id="globalAlert" class="alert alert-info py-2 small text-center m-0" role="alert" style="display:none;"></div>
 
 
-<section id="adminPanel" class="admin-panel container" style="display:none;">
+<section id="adminPanel" class="admin-panel container admin-only">
     <div class="row g-4 mt-4">
-
         <div class="col-lg-5">
             <div class="card h-100">
                 <div class="card-body">
@@ -101,9 +97,7 @@
                         </div>
                         <div class="col-md-5">
                             <label class="form-label">Kateqoriya</label>
-                            <select id="pCategory" class="form-select">
-                                <option value="">— seçin —</option>
-                            </select>
+                            <select id="pCategory" class="form-select"><option value="">— seçin —</option></select>
                         </div>
                         <div class="col-md-8">
                             <label class="form-label">Açıqlama (opsional)</label>
@@ -137,11 +131,9 @@
             <button id="btnRefresh" class="btn btn-outline-secondary btn-sm">Yenilə</button>
         </div>
     </div>
-
     <div id="productsRow" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4"></div>
     <div id="emptyState" class="text-center text-muted my-5" style="display:none;">Hələ məhsul yoxdur.</div>
 </main>
-
 
 <footer class="container pb-5">
     <hr>
@@ -174,46 +166,91 @@
     </div></div>
 </div>
 
+<!-- CART MODAL -->
+<div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0">
+            <div class="modal-header">
+                <h5 class="modal-title">Səbət</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="cartBody"></div>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <strong>Toplam: <span id="cartTotal">0 AZN</span></strong>
+                    <div class="btn-group">
+                        <button id="btnCheckoutOffline" class="btn btn-brand">Kassada ödə (OFFLINE)</button>
+                        <button id="btnCheckoutOnline"  class="btn btn-outline-dark">Onlayn ödə (ONLINE)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-
     const $ = s => document.querySelector(s);
     const fmtAZN = new Intl.NumberFormat('az-AZ',{style:'currency',currency:'AZN',maximumFractionDigits:2});
-    function esc(s=''){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
-    function token(){return localStorage.getItem('token')||'';}
-    function setToken(t){t?localStorage.setItem('token',t):localStorage.removeItem('token');updateAuthUI();}
-    function authHeaders(){const h={'Content-Type':'application/json'}; const t=token(); if(t)h.Authorization=`Bearer ${t}`; return h;}
-    function showAlert(msg,type='info'){const el=$('#globalAlert');el.className=`alert alert-${type} py-2 small text-center m-0`;el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',2600);}
-
+    const esc = (s='') => s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'" :'&#39;'}[m]));
+    const token = () => localStorage.getItem('token')||'';
+    const setToken = t => { t?localStorage.setItem('token',t):localStorage.removeItem('token'); };
+    const authHeaders = () => { const h={'Content-Type':'application/json'}; const t=token(); if(t) h.Authorization='Bearer '+t; return h; };
+    const showAlert = (msg,type='info') => { const el=$('#globalAlert'); el.className=`alert alert-${type} py-2 small text-center m-0`; el.textContent=msg; el.style.display='block'; setTimeout(()=>el.style.display='none',2600); };
 
     const loginModal = new bootstrap.Modal($('#loginModal'));
-    $('#btnOpenLogin').onclick = () => { $('#loginMsg').textContent=''; loginModal.show(); };
-    $('#btnHeroLogin').onclick = () => { $('#loginMsg').textContent=''; loginModal.show(); };
-    $('#btnLogout').onclick = () => { setToken(''); showAlert('Çıxış edildi','secondary'); loadProducts(); };
+    const cartModal  = new bootstrap.Modal($('#cartModal'));
 
+    $('#btnOpenLogin').onclick = ()=>{ $('#loginMsg').textContent=''; loginModal.show(); };
+    $('#btnHeroLogin').onclick  = ()=>{ $('#loginMsg').textContent=''; loginModal.show(); };
+    $('#btnLogout').onclick     = async ()=>{ setToken(''); localStorage.removeItem('roles'); await updateAuthUI(); loadProducts(); showAlert('Çıxış edildi','secondary'); };
+    $('#btnOpenCart').onclick   = async ()=>{ await loadCart(); cartModal.show(); };
+
+    // LOGIN
     $('#btnLogin').onclick = async ()=>{
         const email=$('#email').value.trim(), password=$('#password').value.trim();
         const msg=$('#loginMsg'); if(!email||!password){ msg.textContent='Email/şifrə tələb olunur'; msg.className='small text-danger'; return; }
         try{
-            const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+            const r=await fetch('/api/open/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
             if(!r.ok) throw new Error('Login uğursuz: '+r.status);
             const data=await r.json(); setToken(data.token);
             msg.textContent='Uğurlu giriş ✅'; msg.className='small text-success';
             setTimeout(()=>loginModal.hide(), 500);
-            loadCategories(); loadProducts();
+            await updateAuthUI();
+            await loadCategories(); await loadProducts(); await loadCart();
         }catch(e){ msg.textContent=e.message; msg.className='small text-danger'; }
     };
 
-    function updateAuthUI(){
+    async function fetchMe(){
+        try{
+            const r = await fetch('/api/open/me', { headers: authHeaders() });
+            if(!r.ok) return {name:null, roles:[]};
+            const data = await r.json();
+            const roles = (data.authorities||[]).map(a=>a.authority);
+            localStorage.setItem('roles', JSON.stringify(roles));
+            return {name:data.name, roles};
+        }catch{ return {name:null, roles:[]}; }
+    }
+    const hasRole = role => { try{ return (JSON.parse(localStorage.getItem('roles')||'[]')||[]).includes(role); }catch{return false;} };
+
+    async function updateAuthUI(){
         const on = !!token();
-        $('#btnLogout').style.display = on ? 'inline-block' : 'none';
-        $('#btnOpenLogin').style.display = on ? 'none' : 'inline-block';
-        $('#adminPanel').style.display = on ? 'block' : 'none';
-        document.querySelectorAll('.admin-only').forEach(el=>el.style.display = on ? 'inline-block' : 'none');
+        if(on) await fetchMe(); else localStorage.removeItem('roles');
+
+        $('#btnLogout').style.display   = on ? 'inline-block' : 'none';
+        $('#btnOpenLogin').style.display= on ? 'none' : 'inline-block';
+        $('#btnOpenCart').style.display = on ? 'inline-block' : 'none';
+
+        const isAdmin = hasRole('ROLE_ADMIN');
+
+        document.querySelectorAll('.admin-only').forEach(el=>{
+            el.style.display = (on && isAdmin) ? '' : 'none';
+        });
     }
 
-
+    // DATA
     let allItems = [];
+    let cart = { items:[], total:0 };
 
     function renderItems(items){
         const row = $('#productsRow'), empty=$('#emptyState');
@@ -233,11 +270,28 @@
             ${p.description?`<p class="card-text small text-muted mt-2 mb-2">${esc(p.description)}</p>`:''}
             <span class="badge badge-cat">${p.categoryName ? esc(p.categoryName) : (p.categoryId!=null?('#'+p.categoryId):'Kateqoriya')}</span>
           </div>
-          <div class="card-footer bg-white border-0 pt-0 d-flex justify-content-end">
+          <div class="card-footer bg-white border-0 pt-0 d-flex justify-content-between">
+            <button class="btn btn-outline-primary btn-sm" data-add="${p.id}">Səbətə at</button>
             <button class="btn btn-outline-danger btn-sm admin-only" data-del="${p.id}">Sil</button>
           </div>
         </div>`;
             row.appendChild(col);
+        });
+
+        // add to cart
+        document.querySelectorAll('[data-add]').forEach(btn=>{
+            btn.onclick = async ()=>{
+                if(!token()){ showAlert('Giriş tələb olunur','warning'); return; }
+                const id = Number(btn.getAttribute('data-add'));
+                try{
+                    const r = await fetch('/api/cart/items', {
+                        method:'POST', headers: authHeaders(), body: JSON.stringify({ productId:id, quantity:1 })
+                    });
+                    if(!r.ok) throw new Error('Səbətə əlavə olunmadı: '+r.status);
+                    showAlert('Səbətə əlavə olundu ✅','success');
+                    await loadCart(); cartModal.show();
+                }catch(e){ showAlert(e.message,'danger'); }
+            };
         });
 
 
@@ -264,18 +318,16 @@
         renderItems(filtered);
     }
 
-
     async function loadCategories(){
         try{
             const r=await fetch('/api/categories');
             if(!r.ok) throw new Error('Kateqoriyalar yüklənmədi: '+r.status);
             const cats=await r.json();
 
-
-            const sel=$('#pCategory'); sel.innerHTML='<option value="">— seçin —</option>';
-            cats.forEach(c=>{ const o=document.createElement('option'); o.value=c.id; o.textContent=`${c.id} — ${c.name}`; sel.appendChild(o); });
-
-
+            const sel=$('#pCategory'); if(sel){
+                sel.innerHTML='<option value="">— seçin —</option>';
+                cats.forEach(c=>{ const o=document.createElement('option'); o.value=c.id; o.textContent=`${c.id} — ${c.name}`; sel.appendChild(o); });
+            }
             const catFilter = $('#catFilter'); if(catFilter){
                 catFilter.innerHTML = '<option value="">Bütün kateqoriyalar</option>';
                 cats.forEach(c=>{ const o=document.createElement('option'); o.value=c.id; o.textContent=c.name; catFilter.appendChild(o); });
@@ -289,6 +341,7 @@
             if(!r.ok) throw new Error('Məhsullar yüklənmədi: '+r.status);
             allItems = await r.json();
             filterAndRender();
+            await updateAuthUI();
         }catch(e){ showAlert(e.message,'danger'); }
     }
 
@@ -327,14 +380,111 @@
     }
 
 
+    async function loadCart(){
+        if(!token()){ cart={items:[], total:0}; updateCartUI(); return; }
+        try{
+            const r = await fetch('/api/cart', { headers: authHeaders() });
+            if(!r.ok) throw new Error('Səbət yüklənmədi: '+r.status);
+            cart = await r.json();
+            updateCartUI();
+        }catch(e){ showAlert(e.message,'warning'); }
+    }
+
+    function updateCartUI(){
+        const count = (cart.items||[]).reduce((s,i)=>s+(i.quantity||0),0);
+        $('#cartCount').textContent = count;
+
+        const body = $('#cartBody');
+        if(!cart.items || cart.items.length===0){
+            body.innerHTML = '<div class="text-center text-muted py-4">Səbət boşdur.</div>';
+        } else {
+            body.innerHTML = `
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead><tr><th>Məhsul</th><th>Qiymət</th><th>Ədəd</th><th>Cəm</th><th></th></tr></thead>
+            <tbody>
+              ${(cart.items||[]).map(i=>`
+                <tr>
+                  <td>${esc(i.productName||'')}</td>
+                  <td>${i.unitPrice!=null?fmtAZN.format(i.unitPrice):''}</td>
+                  <td style="max-width:120px;">
+                    <div class="input-group input-group-sm">
+                      <button class="btn btn-outline-secondary" data-qty-dec="${i.productId}">-</button>
+                      <input class="form-control text-center" data-qty-input="${i.productId}" value="${i.quantity}">
+                      <button class="btn btn-outline-secondary" data-qty-inc="${i.productId}">+</button>
+                    </div>
+                  </td>
+                  <td>${i.lineTotal!=null?fmtAZN.format(i.lineTotal):''}</td>
+                  <td class="text-end"><button class="btn btn-sm btn-outline-danger" data-remove="${i.productId}">Sil</button></td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>`;
+        }
+        $('#cartTotal').textContent = fmtAZN.format(cart.total||0);
+
+        document.querySelectorAll('[data-remove]').forEach(btn=>{
+            btn.onclick = ()=> removeItem(Number(btn.getAttribute('data-remove')));
+        });
+        document.querySelectorAll('[data-qty-inc]').forEach(btn=>{
+            btn.onclick = ()=> changeQty(Number(btn.getAttribute('data-qty-inc')), +1);
+        });
+        document.querySelectorAll('[data-qty-dec]').forEach(btn=>{
+            btn.onclick = ()=> changeQty(Number(btn.getAttribute('data-qty-dec')), -1);
+        });
+        document.querySelectorAll('[data-qty-input]').forEach(inp=>{
+            inp.onchange = ()=> setQty(Number(inp.getAttribute('data-qty-input')), Number(inp.value)||1);
+        });
+    }
+
+    async function removeItem(productId){
+        try{
+            const r = await fetch(`/api/cart/items/${productId}`, { method:'DELETE', headers: authHeaders() });
+            if(!r.ok) throw new Error('Səbətdən silinmədi: '+r.status);
+            await loadCart();
+        }catch(e){ showAlert(e.message,'danger'); }
+    }
+    async function setQty(productId, qty){
+        try{
+            const r = await fetch(`/api/cart/items/${productId}?qty=${qty}`, { method:'PUT', headers: authHeaders() });
+            if(!r.ok) throw new Error('Miqdar dəyişmədi: '+r.status);
+            await loadCart();
+        }catch(e){ showAlert(e.message,'danger'); }
+    }
+    function changeQty(productId, delta){
+        const cur = (cart.items.find(i=>i.productId===productId)?.quantity)||1;
+        setQty(productId, Math.max(1, cur+delta));
+    }
+
+
+    $('#btnCheckoutOffline').onclick = ()=> checkout('OFFLINE');
+    $('#btnCheckoutOnline').onclick  = ()=> checkout('ONLINE');
+    async function checkout(method){
+        try{
+            if(!cart.items || cart.items.length===0){ showAlert('Səbət boşdur','warning'); return; }
+            const r = await fetch('/api/orders/checkout', {
+                method:'POST', headers: authHeaders(), body: JSON.stringify({ paymentMethod: method })
+            });
+            if(!r.ok){ const t=await r.text(); throw new Error(`Checkout uğursuz: ${r.status} ${t}`); }
+            const order = await r.json();
+            showAlert(`Sifariş #${order.id} yaradıldı (${method}) ✅`, 'success');
+            cart = {items:[], total:0}; updateCartUI(); cartModal.hide();
+        }catch(e){ showAlert(e.message,'danger'); }
+    }
+
+
     $('#btnAdd').onclick = addProduct;
     $('#btnAddCat').onclick = addCategory;
     $('#btnRefresh').onclick = loadProducts;
     $('#search')?.addEventListener('input', filterAndRender);
     $('#catFilter')?.addEventListener('change', filterAndRender);
 
-
-    updateAuthUI(); loadCategories(); loadProducts();
+    (async function init(){
+        await updateAuthUI();
+        await loadCategories();
+        await loadProducts();
+        await loadCart();
+    })();
 </script>
 </body>
 </html>
