@@ -6,18 +6,13 @@
     <title>Restoran Menyusu – Demo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        :root{
-            --hero-bg:url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1600&auto=format&fit=crop');
-            --brand:#ff6a3d; --brand-dark:#e2552b; --soft:#f8f5f2;
-        }
+        :root{ --hero-bg:url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1600&auto=format&fit=crop'); --brand:#ff6a3d; --brand-dark:#e2552b; --soft:#f8f5f2; }
         body{background:var(--soft);}
         .navbar{background:#ffffffcc;backdrop-filter:blur(6px);border-bottom:1px solid #eee;}
         .navbar-brand{font-weight:800;letter-spacing:.3px}
         .btn-brand{background:var(--brand);color:#fff;border:none}
         .btn-brand:hover{background:var(--brand-dark);color:#fff}
-        .hero{min-height:42vh;display:flex;align-items:center;color:#fff;
-            background-image:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),var(--hero-bg);
-            background-size:cover;background-position:center;}
+        .hero{min-height:42vh;display:flex;align-items:center;color:#fff;background-image:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),var(--hero-bg);background-size:cover;background-position:center;}
         .hero h1{font-weight:900;font-size:clamp(28px,5vw,48px)}
         .chip{background:#ffffff22;border:1px solid #ffffff33;color:#fff;padding:6px 10px;border-radius:999px;font-size:12px}
         .menu-card{border:0;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.06);border-radius:14px;background:#fff;transition:.15s}
@@ -31,11 +26,10 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
+
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
         <a class="navbar-brand" href="#">🍽️ Restoran Menyu</a>
-
 
         <div class="ms-auto d-flex align-items-center gap-2 flex-nowrap">
 
@@ -51,7 +45,7 @@
             <div class="dropdown" id="accountDropdown" style="display:none;">
                 <button class="btn btn-outline-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown">Hesab</button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#" id="menuMe">Hesabım</a></li>
+                    <li><a class="dropdown-item" href="#" id="menuMe">Kartlarım</a></li>
                     <li><a class="dropdown-item" href="#" id="menuOrders">Sifarişlərim</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item text-danger" href="#" id="menuLogout">Çıxış</a></li>
@@ -60,7 +54,6 @@
         </div>
     </div>
 </nav>
-
 
 <header class="hero">
     <div class="container py-5">
@@ -125,13 +118,15 @@
     <div id="emptyState" class="text-center text-muted my-5" style="display:none;">Hələ məhsul yoxdur.</div>
 </main>
 
-
 <div class="modal fade" id="meModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog"><div class="modal-content border-0">
-        <div class="modal-header"><h5 class="modal-title">Hesabım</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
-        <div class="modal-body"><div id="meBody" class="small"></div></div>
+    <div class="modal-dialog modal-lg"><div class="modal-content border-0">
+        <div class="modal-header"><h5 class="modal-title">Hesabım • Kartlar</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body" id="meBody">
+
+        </div>
     </div></div>
 </div>
+
 
 <div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0">
@@ -167,8 +162,8 @@
             <div class="modal-header"><h5 class="modal-title">Səbət</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
             <div class="modal-body">
                 <div id="cartBody"></div>
-
                 <hr>
+
 
                 <div class="mb-2">
                     <div class="form-check form-check-inline">
@@ -182,10 +177,7 @@
                 </div>
                 <div id="deliveryFields" style="display:none;">
                     <div class="mb-2"><label class="form-label">Ünvan</label><input id="address" class="form-control" placeholder="Şəhər/Rayon, küçə, bina, mənzil..."></div>
-                    <div class="mb-2">
-                        <label class="form-label">Çatdırılma haqqı (AZN)</label>
-                        <input id="deliveryFee" type="number" step="0.01" class="form-control" value="3.00">
-                    </div>
+                    <div class="mb-2"><label class="form-label">Çatdırılma haqqı (AZN)</label><input id="deliveryFee" type="number" step="0.01" class="form-control" value="3.00"></div>
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mt-3">
@@ -215,7 +207,7 @@
     const meModal   = new bootstrap.Modal(document.getElementById('meModal'));
     const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
 
-    // NAVBAR actions
+
     document.getElementById('btnOpenAuth').onclick = ()=> authModal.show();
     document.getElementById('btnHeroAuth').onclick  = ()=> authModal.show();
 
@@ -225,18 +217,12 @@
         await updateAuthUI(); await loadCart();
         showAlert('Çıxış edildi','secondary');
     };
-    document.getElementById('menuMe').onclick = async (e)=>{
-        e.preventDefault();
-        const me=await fetchMe();
-        document.getElementById('meBody').innerHTML = `<div><b>Ad:</b> ${esc(me.name||'-')}</div><div><b>Rollar:</b> ${(me.roles||[]).join(', ')||'-'}</div>`;
-        meModal.show();
-    };
+
+    document.getElementById('menuMe').onclick = async (e)=>{ e.preventDefault(); if(!token()) return authModal.show(); openCards(); };
     document.getElementById('menuOrders').onclick = (e)=>{ e.preventDefault(); showAlert('Sifarişlərim UI-sini sonra əlavə edəcəyik','secondary'); };
 
     document.getElementById('btnOpenCart').onclick = async ()=>{
         if(!token()){
-
-            cart = { items:[], total:0 };
             document.getElementById('cartBody').innerHTML = `
         <div class="text-center text-muted py-4">
           Səbətdən istifadə üçün hesabınıza daxil olun və ya qeydiyyatdan keçin.
@@ -250,7 +236,7 @@
         await loadCart(); cartModal.show();
     };
 
-    // AUTH
+
     document.getElementById('btnLogin').onclick = async ()=>{
         const email=document.getElementById('lEmail').value.trim(), password=document.getElementById('lPassword').value.trim();
         const msg=document.getElementById('loginMsg'); if(!email||!password){ msg.textContent='Email/şifrə tələb olunur'; msg.className='small text-danger'; return; }
@@ -295,12 +281,8 @@
     async function updateAuthUI(){
         const on = !!token();
         if(on) await fetchMe(); else localStorage.removeItem('roles');
-
-
         document.getElementById('btnOpenAuth').style.display = on ? 'none' : 'inline-block';
         document.getElementById('accountDropdown').style.display = on ? 'block' : 'none';
-
-
         const isAdmin = hasRole('ROLE_ADMIN');
         document.querySelectorAll('.admin-only').forEach(el=>{ el.style.display = (on && isAdmin) ? '' : 'none'; });
     }
@@ -348,7 +330,7 @@
             };
         });
 
-        // delete (yalnız admin)
+
         document.querySelectorAll('[data-del]').forEach(btn=>{
             btn.onclick = async ()=>{
                 const id = btn.getAttribute('data-del');
@@ -363,21 +345,20 @@
     }
 
     function filterAndRender(){
-        const q=(document.getElementById('search').value||'').toLowerCase().trim();
-        const cf=document.getElementById('catFilter').value||'';
-        const filtered = allItems.filter(p =>
+        const q=($('#search').value||'').toLowerCase().trim();
+        const cf=$('#catFilter').value||'';
+        renderItems(allItems.filter(p =>
             (!q || (p.name||'').toLowerCase().includes(q)) &&
             (!cf || String(p.categoryId)===cf)
-        );
-        renderItems(filtered);
+        ));
     }
 
     async function loadCategories(){
         try{
             const r=await fetch('/api/categories'); if(!r.ok) throw new Error('Kateqoriyalar yüklənmədi: '+r.status);
             const cats=await r.json();
-            const sel=document.getElementById('pCategory'); if(sel){ sel.innerHTML='<option value="">— seçin —</option>'; cats.forEach(c=>{ const o=document.createElement('option'); o.value=c.id; o.textContent=`${c.id} — ${c.name}`; sel.appendChild(o); }); }
-            const catFilter=document.getElementById('catFilter'); catFilter.innerHTML='<option value="">Bütün kateqoriyalar</option>'; cats.forEach(c=>{ const o=document.createElement('option'); o.value=c.id; o.textContent=c.name; catFilter.appendChild(o); });
+            const sel=$('#pCategory'); if(sel){ sel.innerHTML='<option value="">— seçin —</option>'; cats.forEach(c=>{ const o=document.createElement('option'); o.value=c.id; o.textContent=`${c.id} — ${c.name}`; sel.appendChild(o); }); }
+            const catFilter=$('#catFilter'); catFilter.innerHTML='<option value="">Bütün kateqoriyalar</option>'; cats.forEach(c=>{ const o=document.createElement('option'); o.value=c.id; o.textContent=c.name; catFilter.appendChild(o); });
         }catch(e){ showAlert(e.message,'warning'); }
     }
 
@@ -389,10 +370,10 @@
     }
 
 
-    document.getElementById('btnAdd').onclick = async ()=>{
+    $('#btnAdd').onclick = async ()=>{
         const name=$('#pName').value.trim(), price=$('#pPrice').value.trim(), categoryId=$('#pCategory').value.trim();
         const description=$('#pDesc').value.trim(), imageUrl=$('#pImage').value.trim();
-        const addMsg=document.getElementById('addMsg');
+        const addMsg=$('#addMsg');
         if(!name||!price||!categoryId){ addMsg.textContent='Ad, qiymət və kateqoriya tələb olunur'; addMsg.className='small text-danger'; return; }
         try{
             const dto={ name, price:Number(price), categoryId:Number(categoryId), description: description||null, imageUrl: imageUrl||null };
@@ -403,8 +384,8 @@
             loadProducts();
         }catch(e){ addMsg.textContent=e.message; addMsg.className='small text-danger'; }
     };
-    document.getElementById('btnAddCat').onclick = async ()=>{
-        const name=$('#cName').value.trim(); const description=$('#cDesc').value.trim(); const catMsg=document.getElementById('catMsg');
+    $('#btnAddCat').onclick = async ()=>{
+        const name=$('#cName').value.trim(); const description=$('#cDesc').value.trim(); const catMsg=$('#catMsg');
         if(!name){ catMsg.textContent='Ad tələb olunur'; catMsg.className='small text-danger'; return; }
         try{
             const r=await fetch('/api/categories',{ method:'POST', headers: authHeaders(), body: JSON.stringify({name, description: description||null}) });
@@ -414,7 +395,7 @@
         }catch(e){ catMsg.textContent=e.message; catMsg.className='small text-danger'; }
     };
 
-    // CART
+
     async function loadCart(){
         if(!token()){ cart={items:[], total:0}; updateCartUI(); return; }
         try{
@@ -424,17 +405,17 @@
     }
 
     function calcGrandTotal(){
-        const isDelivery = document.getElementById('optDelivery').checked;
-        const fee = isDelivery ? Number(document.getElementById('deliveryFee').value||0) : 0;
+        const isDelivery = $('#optDelivery').checked;
+        const fee = isDelivery ? Number($('#deliveryFee').value||0) : 0;
         const grand = (cart.total||0) + fee;
-        document.getElementById('cartTotal').textContent = fmtAZN.format(grand);
+        $('#cartTotal').textContent = fmtAZN.format(grand);
     }
 
     function updateCartUI(){
         const count = (cart.items||[]).reduce((s,i)=>s+(i.quantity||0),0);
-        document.getElementById('cartCount').textContent = count;
+        $('#cartCount').textContent = count;
 
-        const body=document.getElementById('cartBody');
+        const body=$('#cartBody');
         if(!cart.items || cart.items.length===0){
             body.innerHTML = '<div class="text-center text-muted py-4">Səbət boşdur.</div>';
         } else {
@@ -461,16 +442,12 @@
           </table>
         </div>`;
         }
-
-        // handlers
         document.querySelectorAll('[data-remove]').forEach(btn=>btn.onclick=()=>removeItem(Number(btn.getAttribute('data-remove'))));
         document.querySelectorAll('[data-qty-inc]').forEach(btn=>btn.onclick=()=>changeQty(Number(btn.getAttribute('data-qty-inc')), +1));
         document.querySelectorAll('[data-qty-dec]').forEach(btn=>btn.onclick=()=>changeQty(Number(btn.getAttribute('data-qty-dec')), -1));
         document.querySelectorAll('[data-qty-input]').forEach(inp=>inp.onchange=()=>setQty(Number(inp.getAttribute('data-qty-input')), Number(inp.value)||1));
-
         calcGrandTotal();
     }
-
     async function removeItem(productId){
         try{ const r=await fetch(`/api/cart/items/${productId}`,{method:'DELETE',headers: authHeaders()}); if(!r.ok) throw new Error('Səbətdən silinmədi: '+r.status); await loadCart(); }
         catch(e){ showAlert(e.message,'danger'); }
@@ -481,20 +458,20 @@
     }
     function changeQty(productId, delta){ const cur=(cart.items.find(i=>i.productId===productId)?.quantity)||1; setQty(productId, Math.max(1, cur+delta)); }
 
-    document.getElementById('optPickup').onchange = ()=>{ document.getElementById('deliveryFields').style.display='none'; calcGrandTotal(); };
-    document.getElementById('optDelivery').onchange= ()=>{ document.getElementById('deliveryFields').style.display='block'; calcGrandTotal(); };
-    document.getElementById('deliveryFee').oninput  = calcGrandTotal;
+    $('#optPickup').onchange = ()=>{ $('#deliveryFields').style.display='none'; calcGrandTotal(); };
+    $('#optDelivery').onchange= ()=>{ $('#deliveryFields').style.display='block'; calcGrandTotal(); };
+    $('#deliveryFee').oninput  = calcGrandTotal;
 
-    document.getElementById('btnCheckoutOffline').onclick = ()=> checkout('OFFLINE');
-    document.getElementById('btnCheckoutOnline').onclick  = ()=> checkout('ONLINE');
+    $('#btnCheckoutOffline').onclick = ()=> checkout('OFFLINE');
+    $('#btnCheckoutOnline').onclick  = ()=> checkout('ONLINE');
 
     async function checkout(method){
         try{
             if(!token()){ authModal.show(); return; }
             if(!cart.items || cart.items.length===0){ showAlert('Səbət boşdur','warning'); return; }
-            const isDelivery = document.getElementById('optDelivery').checked;
-            const deliveryAddress = isDelivery ? (document.getElementById('address').value.trim()||null) : null;
-            const deliveryFee = isDelivery ? Number(document.getElementById('deliveryFee').value||0) : 0;
+            const isDelivery = $('#optDelivery').checked;
+            const deliveryAddress = isDelivery ? ($('#address').value.trim()||null) : null;
+            const deliveryFee = isDelivery ? Number($('#deliveryFee').value||0) : 0;
 
             const r = await fetch('/api/orders/checkout',{
                 method:'POST', headers: authHeaders(), body: JSON.stringify({ paymentMethod: method, deliveryAddress, deliveryFee })
@@ -507,9 +484,81 @@
     }
 
 
-    document.getElementById('btnRefresh').onclick = loadProducts;
-    document.getElementById('search').addEventListener('input', filterAndRender);
-    document.getElementById('catFilter').addEventListener('change', filterAndRender);
+    async function loadMyCards(){
+        const r=await fetch('/api/account/cards',{headers:authHeaders()});
+        if(!r.ok) throw new Error('Kartlar yüklənmədi');
+        return await r.json();
+    }
+    async function openCards(){
+        try{
+            const cards = await loadMyCards();
+            const html = `
+        <div class="row g-4">
+          <div class="col-lg-7">
+            <h6 class="mb-2">Kartlarım</h6>
+            <ul class="list-group">
+              ${cards.length? cards.map(c=>`
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <div>
+                    <b>${c.brand}</b> •••• ${c.last4}
+                    <span class="text-muted">(${String(c.expMonth).padStart(2,'0')}/${c.expYear})</span>
+                    ${c.defaultCard? '<span class="badge bg-success ms-2">Default</span>':''}
+                  </div>
+                  <div class="btn-group btn-group-sm">
+                    ${c.defaultCard? '' : `<button class="btn btn-outline-primary" data-setdef="${c.id}">Default et</button>`}
+                    <button class="btn btn-outline-danger" data-del="${c.id}">Sil</button>
+                  </div>
+                </li>`).join('') : '<li class="list-group-item text-muted">Kart yoxdur</li>'}
+            </ul>
+          </div>
+          <div class="col-lg-5">
+            <h6 class="mb-2">Yeni kart əlavə et (DEMO)</h6>
+            <div class="mb-2"><label class="form-label">Kart nömrəsi</label><input id="cardNumber" class="form-control" placeholder="4111 1111 1111 1111"></div>
+            <div class="row g-2">
+              <div class="col-4"><label class="form-label">Ay</label><input id="cardExpM" type="number" class="form-control" placeholder="MM"></div>
+              <div class="col-4"><label class="form-label">İl</label><input id="cardExpY" type="number" class="form-control" placeholder="YYYY"></div>
+              <div class="col-4"><label class="form-label">CVC</label><input id="cardCvc"  type="number" class="form-control" placeholder="CVC"></div>
+            </div>
+            <button id="btnSaveCard" class="btn btn-brand w-100 mt-3">Kartı saxla</button>
+            <div class="small text-muted mt-2">Qeyd: Bu demo üçündür. Realda kart məlumatı provayder SDK-si ilə tokenləşdirilməlidir.</div>
+          </div>
+        </div>`;
+            $('#meBody').innerHTML = html; meModal.show();
+
+
+            $('#btnSaveCard').onclick = async ()=>{
+                try{
+                    const dto = {
+                        cardNumber: $('#cardNumber').value.trim(),
+                        expMonth: Number($('#cardExpM').value),
+                        expYear:  Number($('#cardExpY').value),
+                        cvc:      $('#cardCvc').value.trim()
+                    };
+                    const r=await fetch('/api/account/cards',{method:'POST',headers:authHeaders(),body:JSON.stringify(dto)});
+                    if(!r.ok){ const t=await r.text(); throw new Error('Kart saxlanmadı: '+t); }
+                    showAlert('Kart saxlandı ✅','success'); openCards();
+                }catch(e){ showAlert(e.message,'danger'); }
+            };
+            document.querySelectorAll('[data-del]').forEach(b=> b.onclick = async ()=>{
+                const id=b.getAttribute('data-del');
+                const r=await fetch(`/api/account/cards/${id}`,{method:'DELETE',headers:authHeaders()});
+                if(!r.ok) return showAlert('Silinmədi','danger');
+                showAlert('Silindi ✅','success'); openCards();
+            });
+            document.querySelectorAll('[data-setdef]').forEach(b=> b.onclick = async ()=>{
+                const id=b.getAttribute('data-setdef');
+                const r=await fetch(`/api/account/cards/${id}/default`,{method:'PUT',headers:authHeaders()});
+                if(!r.ok) return showAlert('Dəyişmədi','danger');
+                showAlert('Default kart seçildi ✅','success'); openCards();
+            });
+
+        }catch(e){ showAlert(e.message,'danger'); }
+    }
+
+
+    $('#btnRefresh').onclick = loadProducts;
+    $('#search').addEventListener('input', filterAndRender);
+    $('#catFilter').addEventListener('change', filterAndRender);
 
 
     (async function init(){

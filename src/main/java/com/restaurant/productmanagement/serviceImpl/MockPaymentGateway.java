@@ -13,6 +13,9 @@ public class MockPaymentGateway implements PaymentGateway {
     public String createPayment(BigDecimal amount, String description) {
         return "PAY-" + UUID.randomUUID();
     }
+
     @Override
-    public boolean capture(String providerRef) { return true; }
+    public String tokenizeCard(String cardNumber, int expMonth, int expYear, String cvc) {
+        return "CARD-" + UUID.randomUUID();
+    }
 }

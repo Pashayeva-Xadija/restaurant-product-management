@@ -21,9 +21,12 @@ public class CartServiceImpl implements CartService {
     private final ProductRepository productRepository;
     private final CartMapper cartMapper;
 
+
     private Cart getOrCreate(String email) {
         return cartRepository.findByUserEmail(email)
-                .orElseGet(() -> cartRepository.save(Cart.builder().userEmail(email).build()));
+                .orElseGet(() -> cartRepository.save(Cart.builder()
+                        .userEmail(email)
+                        .build()));
     }
 
     @Override
@@ -35,21 +38,24 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public CartDto addItem(String userEmail, AddToCartRequest req) {
         Cart cart = getOrCreate(userEmail);
+
         Product product = productRepository.findById(req.getProductId())
                 .orElseThrow(() -> new RuntimeException("Məhsul tapılmadı"));
 
+
         CartItem item = cart.getItems().stream()
                 .filter(i -> i.getProduct().getId().equals(product.getId()))
-                .findFirst().orElse(null);
+                .findFirst()
+                .orElse(null);
 
-        int addQty = Math.max(1, req.getQuantity());
+        int addQty = Math.max(1, req.getQuantity() == null ? 1 : req.getQuantity());
 
         if (item == null) {
             item = CartItem.builder()
-                    .product(product)
-                    .quantity(addQty)
-                    .unitPrice(product.getPrice())
                     .cart(cart)
+                    .product(product)
+                    .unitPrice(product.getPrice())
+                    .quantity(addQty)
                     .build();
             cart.getItems().add(item);
         } else {
@@ -65,11 +71,13 @@ public class CartServiceImpl implements CartService {
         if (quantity <= 0) {
             return removeItem(userEmail, productId);
         }
+
         Cart cart = getOrCreate(userEmail);
         CartItem item = cart.getItems().stream()
                 .filter(i -> i.getProduct().getId().equals(productId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Məhsul səbətdə yoxdur"));
+
         item.setQuantity(quantity);
         return cartMapper.toDto(cartRepository.save(cart));
     }
@@ -84,7 +92,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public void clear(String userEmail) {
-        cartRepository.deleteByUserEmail(userEmail);
+        // Əgər CartRepository-də deleteByUserEmail varsa, onu çağır:
+        try {
+            cartRepository.deleteByUserEmail(userEmail);
+        } catch (Exception ignored) {
+            cartRepository.findByUserEmail(userEmail).ifPresent(cartRepository::delete);
+        }
     }
 }

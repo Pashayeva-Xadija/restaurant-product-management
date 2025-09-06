@@ -5,5 +5,8 @@ import java.math.BigDecimal;
 
 public interface PaymentGateway {
     String createPayment(BigDecimal amount, String description);
-    boolean capture(String providerRef);
+
+    default String tokenizeCard(String cardNumber, int expMonth, int expYear, String cvc) {
+        return "CARD-" + java.util.UUID.randomUUID();
+    }
 }
