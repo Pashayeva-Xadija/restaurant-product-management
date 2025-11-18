@@ -122,11 +122,13 @@ Authorization: Bearer <token>
 
 ---
 
-## 📬 Contact
+✨ Created By:
 
-Made with ❤️ by **Xədicə Paşayeva**  
-📧 xadijapashayeva@gmail.com  
-🔗 [LinkedIn](https://www.linkedin.com/in/xadija-pashayeva)
+Made with by Xadija Pashayeva
+
+📧 Email: xadijapashayeva@gmail.com
+
+🔗 LinkedIn: https://www.linkedin.com/in/xadija-pashayeva
 
 ---
 
