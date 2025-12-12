@@ -126,10 +126,6 @@ Authorization: Bearer <token>
 
 Made with by Xadija Pashayeva
 
-📧 Email: xadijapashayeva@gmail.com
 
-🔗 LinkedIn: https://www.linkedin.com/in/xadija-pashayeva
-
----
 
 
